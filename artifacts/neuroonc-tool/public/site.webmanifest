@@ -1,0 +1,24 @@
+{
+  "name": "NeuroOnc Tool 2025",
+  "short_name": "NeuroOnc 🧠",
+  "description": "NCCN CNS Cancers v3.2025 — Clinical Decision Tool",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#F8FAFC",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
