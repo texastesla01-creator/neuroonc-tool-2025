@@ -226,7 +226,7 @@ const LIGHT = {
   tabBg: "#E5E7EB", activeTab: "#FFFFFF", activeTabText: "#111827", inactiveTabText: "#6B7280",
   inputBg: "#FFFFFF", inputBorder: "#D1D5DB",
   btnBg: "#FFFFFF", btnBorder: "#D1D5DB",
-  disclaimer: "#D1D5DB", colorScheme: "light",
+  accent: "#4F46E5", disclaimer: "#D1D5DB", colorScheme: "light",
   cc: {
     preferred:    { bg: "#DBEAFE", border: "#3B82F6", text: "#1E40AF", label: "Preferred" },
     other:        { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", label: "Other Recommended" },
@@ -243,7 +243,7 @@ const DARK: typeof LIGHT = {
   tabBg: "#1E293B", activeTab: "#0F172A", activeTabText: "#F1F5F9", inactiveTabText: "#94A3B8",
   inputBg: "#1E293B", inputBorder: "#334155",
   btnBg: "#1E293B", btnBorder: "#475569",
-  disclaimer: "#475569", colorScheme: "dark",
+  accent: "#6366F1", disclaimer: "#475569", colorScheme: "dark",
   cc: {
     preferred:    { bg: "#172554", border: "#3B82F6", text: "#93C5FD", label: "Preferred" },
     other:        { bg: "#451A03", border: "#F59E0B", text: "#FCD34D", label: "Other Recommended" },
@@ -315,7 +315,7 @@ function DecTool({ tid, onBack, th }: { tid: string; onBack: () => void; th: Th 
           <p style={{ fontSize: "15px", marginBottom: "14px", color: th.primary }}>{step.message}</p>
           <div style={{ display: "flex", gap: "8px" }}>
             <button onClick={back} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: `1px solid ${th.btnBorder}`, backgroundColor: th.btnBg, cursor: "pointer", fontSize: "13px", color: th.primary }}>← Back</button>
-            <button onClick={() => setCur(step.redirect)} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: "#4F46E5", color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Go →</button>
+            <button onClick={() => setCur(step.redirect)} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: th.accent, color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Go →</button>
           </div>
         </div>
       ) : (
