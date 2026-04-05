@@ -216,24 +216,57 @@ const DT: Record<string, { title: string; steps: any[] }> = {
   ]},
 };
 
-const cc: Record<string, { bg: string; border: string; text: string; label: string }> = {
-  preferred: { bg: "#DBEAFE", border: "#3B82F6", text: "#1E40AF", label: "Preferred" },
-  other: { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", label: "Other Recommended" },
-  circumstance: { bg: "#E0E7FF", border: "#818CF8", text: "#4338CA", label: "Useful in Certain Circumstances" },
-  followup: { bg: "#D1FAE5", border: "#34D399", text: "#065F46", label: "Follow-up" },
+// ─── Theme ────────────────────────────────────────────────────────────────────
+
+const LIGHT = {
+  pageBg: "#F8FAFC", cardBg: "#FFFFFF", subtleBg: "#F9FAFB",
+  primary: "#111827", secondary: "#374151", nearBlack: "#1F2937",
+  muted: "#6B7280", veryMuted: "#9CA3AF",
+  border: "#E5E7EB", lightBorder: "#D1D5DB",
+  tabBg: "#E5E7EB", activeTab: "#FFFFFF", activeTabText: "#111827", inactiveTabText: "#6B7280",
+  inputBg: "#FFFFFF", inputBorder: "#D1D5DB",
+  btnBg: "#FFFFFF", btnBorder: "#D1D5DB",
+  disclaimer: "#D1D5DB", colorScheme: "light",
+  cc: {
+    preferred:    { bg: "#DBEAFE", border: "#3B82F6", text: "#1E40AF", label: "Preferred" },
+    other:        { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", label: "Other Recommended" },
+    circumstance: { bg: "#E0E7FF", border: "#818CF8", text: "#4338CA", label: "Useful in Certain Circumstances" },
+    followup:     { bg: "#D1FAE5", border: "#34D399", text: "#065F46", label: "Follow-up" },
+  } as Record<string, { bg: string; border: string; text: string; label: string }>,
 };
 
-function RC({ rec }: { rec: { category: string; text: string } }) {
-  const c = cc[rec.category] || cc.other;
+const DARK: typeof LIGHT = {
+  pageBg: "#0F172A", cardBg: "#1E293B", subtleBg: "#162032",
+  primary: "#F1F5F9", secondary: "#CBD5E1", nearBlack: "#E2E8F0",
+  muted: "#94A3B8", veryMuted: "#64748B",
+  border: "#334155", lightBorder: "#475569",
+  tabBg: "#1E293B", activeTab: "#0F172A", activeTabText: "#F1F5F9", inactiveTabText: "#94A3B8",
+  inputBg: "#1E293B", inputBorder: "#334155",
+  btnBg: "#1E293B", btnBorder: "#475569",
+  disclaimer: "#475569", colorScheme: "dark",
+  cc: {
+    preferred:    { bg: "#172554", border: "#3B82F6", text: "#93C5FD", label: "Preferred" },
+    other:        { bg: "#451A03", border: "#F59E0B", text: "#FCD34D", label: "Other Recommended" },
+    circumstance: { bg: "#1E1B4B", border: "#818CF8", text: "#C7D2FE", label: "Useful in Certain Circumstances" },
+    followup:     { bg: "#052E16", border: "#34D399", text: "#6EE7B7", label: "Follow-up" },
+  },
+};
+
+type Th = typeof LIGHT;
+
+// ─── Components ───────────────────────────────────────────────────────────────
+
+function RC({ rec, th }: { rec: { category: string; text: string }; th: Th }) {
+  const c = th.cc[rec.category] || th.cc.other;
   return (
     <div style={{ padding: "10px 14px", borderLeft: `4px solid ${c.border}`, backgroundColor: c.bg, borderRadius: "0 8px 8px 0", marginBottom: "5px" }}>
       <span style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" as const, color: c.text, backgroundColor: `${c.border}22`, padding: "1px 6px", borderRadius: "3px" }}>{c.label}</span>
-      <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.4, color: "#1F2937" }}>{rec.text}</p>
+      <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.4, color: th.nearBlack }}>{rec.text}</p>
     </div>
   );
 }
 
-function DecTool({ tid, onBack }: { tid: string; onBack: () => void }) {
+function DecTool({ tid, onBack, th }: { tid: string; onBack: () => void; th: Th }) {
   const tumor = TUMOR_TYPES.find(t => t.id === tid);
   const [hist, setHist] = useState<string[]>([]);
   const [cur, setCur] = useState(tid);
@@ -248,12 +281,12 @@ function DecTool({ tid, onBack }: { tid: string; onBack: () => void }) {
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", paddingBottom: "10px", borderBottom: "1px solid #E5E7EB" }}>
-        <button onClick={onBack} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#6B7280" }}>←</button>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", paddingBottom: "10px", borderBottom: `1px solid ${th.border}` }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: th.muted }}>←</button>
         <span style={{ fontSize: "18px" }}>{tumor?.icon}</span>
         <div style={{ flex: 1 }}>
-          <h2 style={{ margin: 0, fontSize: "15px", fontWeight: 700 }}>{ct?.title}</h2>
-          <span style={{ fontSize: "10px", color: "#9CA3AF" }}>{tumor?.code}</span>
+          <h2 style={{ margin: 0, fontSize: "15px", fontWeight: 700, color: th.primary }}>{ct?.title}</h2>
+          <span style={{ fontSize: "10px", color: th.veryMuted }}>{tumor?.code}</span>
         </div>
       </div>
 
@@ -263,63 +296,63 @@ function DecTool({ tid, onBack }: { tid: string; onBack: () => void }) {
             <p style={{ fontSize: "10px", textTransform: "uppercase" as const, letterSpacing: "0.06em", opacity: 0.8, margin: "0 0 2px" }}>Recommendation</p>
             <h3 style={{ margin: 0, fontSize: "15px", fontWeight: 700, lineHeight: 1.3 }}>{step.title}</h3>
           </div>
-          {step.recommendations.map((r: any, i: number) => <RC key={i} rec={r} />)}
+          {step.recommendations.map((r: any, i: number) => <RC key={i} rec={r} th={th} />)}
           {step.notes?.length > 0 && (
-            <div style={{ backgroundColor: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "8px", padding: "10px", margin: "10px 0" }}>
-              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase" as const, color: "#6B7280", margin: "0 0 4px" }}>Notes</p>
+            <div style={{ backgroundColor: th.subtleBg, border: `1px solid ${th.border}`, borderRadius: "8px", padding: "10px", margin: "10px 0" }}>
+              <p style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase" as const, color: th.muted, margin: "0 0 4px" }}>Notes</p>
               {step.notes.map((n: string, i: number) => (
-                <p key={i} style={{ fontSize: "12px", color: "#374151", margin: "0 0 3px", lineHeight: 1.4, paddingLeft: "8px", borderLeft: "2px solid #D1D5DB" }}>{n}</p>
+                <p key={i} style={{ fontSize: "12px", color: th.secondary, margin: "0 0 3px", lineHeight: 1.4, paddingLeft: "8px", borderLeft: `2px solid ${th.lightBorder}` }}>{n}</p>
               ))}
             </div>
           )}
           <div style={{ display: "flex", gap: "8px" }}>
-            <button onClick={back} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid #D1D5DB", backgroundColor: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>← Back</button>
+            <button onClick={back} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: `1px solid ${th.btnBorder}`, backgroundColor: th.btnBg, cursor: "pointer", fontSize: "13px", fontWeight: 600, color: th.primary }}>← Back</button>
             <button onClick={() => { setCur(tid); setHist([]); }} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: tumor?.color, color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>New</button>
           </div>
         </div>
       ) : step.redirect ? (
         <div style={{ textAlign: "center" as const, padding: "24px 16px" }}>
-          <p style={{ fontSize: "15px", marginBottom: "14px" }}>{step.message}</p>
+          <p style={{ fontSize: "15px", marginBottom: "14px", color: th.primary }}>{step.message}</p>
           <div style={{ display: "flex", gap: "8px" }}>
-            <button onClick={back} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid #D1D5DB", backgroundColor: "white", cursor: "pointer", fontSize: "13px" }}>← Back</button>
+            <button onClick={back} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: `1px solid ${th.btnBorder}`, backgroundColor: th.btnBg, cursor: "pointer", fontSize: "13px", color: th.primary }}>← Back</button>
             <button onClick={() => setCur(step.redirect)} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: "#4F46E5", color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>Go →</button>
           </div>
         </div>
       ) : (
         <div>
-          <h3 style={{ fontSize: "15px", fontWeight: 700, color: "#111827", marginBottom: "10px", lineHeight: 1.3 }}>{step.question}</h3>
+          <h3 style={{ fontSize: "15px", fontWeight: 700, color: th.primary, marginBottom: "10px", lineHeight: 1.3 }}>{step.question}</h3>
           {step.options.map((o: any, i: number) => (
-            <button key={i} onClick={() => setHist(h => [...h, o.next])} style={{ display: "block", width: "100%", padding: "11px 13px", marginBottom: "6px", borderRadius: "8px", border: `2px solid ${tumor?.color}15`, backgroundColor: "white", cursor: "pointer", textAlign: "left" as const, fontSize: "13px", lineHeight: 1.4, color: "#1F2937", fontWeight: 500 }}>{o.label}</button>
+            <button key={i} onClick={() => setHist(h => [...h, o.next])} style={{ display: "block", width: "100%", padding: "11px 13px", marginBottom: "6px", borderRadius: "8px", border: `2px solid ${tumor?.color}25`, backgroundColor: th.cardBg, cursor: "pointer", textAlign: "left" as const, fontSize: "13px", lineHeight: 1.4, color: th.nearBlack, fontWeight: 500 }}>{o.label}</button>
           ))}
-          {hist.length > 1 && <button onClick={back} style={{ marginTop: "6px", padding: "8px", borderRadius: "8px", border: "1px solid #D1D5DB", backgroundColor: "white", cursor: "pointer", fontSize: "13px", color: "#6B7280", width: "100%" }}>← Back</button>}
+          {hist.length > 1 && <button onClick={back} style={{ marginTop: "6px", padding: "8px", borderRadius: "8px", border: `1px solid ${th.btnBorder}`, backgroundColor: th.btnBg, cursor: "pointer", fontSize: "13px", color: th.muted, width: "100%" }}>← Back</button>}
         </div>
       )}
     </div>
   );
 }
 
-function RefView({ sec, onBack }: { sec: any; onBack: () => void }) {
+function RefView({ sec, onBack, th }: { sec: any; onBack: () => void; th: Th }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", paddingBottom: "10px", borderBottom: "1px solid #E5E7EB" }}>
-        <button onClick={onBack} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: "#6B7280" }}>←</button>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px", paddingBottom: "10px", borderBottom: `1px solid ${th.border}` }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "18px", color: th.muted }}>←</button>
         <span style={{ fontSize: "18px" }}>{sec.icon}</span>
         <div>
-          <h2 style={{ margin: 0, fontSize: "15px", fontWeight: 700 }}>{sec.title}</h2>
-          <span style={{ fontSize: "10px", color: "#9CA3AF" }}>{sec.code}</span>
+          <h2 style={{ margin: 0, fontSize: "15px", fontWeight: 700, color: th.primary }}>{sec.title}</h2>
+          <span style={{ fontSize: "10px", color: th.veryMuted }}>{sec.code}</span>
         </div>
       </div>
       {sec.subs.map((s: any, i: number) => (
         <div key={i} style={{ marginBottom: "5px" }}>
-          <button onClick={() => setOpen(open === i ? null : i)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "11px 13px", borderRadius: "8px", border: "none", backgroundColor: open === i ? `${sec.color}10` : "white", cursor: "pointer", textAlign: "left" as const, fontSize: "13px", fontWeight: 600, color: "#111827", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
+          <button onClick={() => setOpen(open === i ? null : i)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "11px 13px", borderRadius: "8px", border: "none", backgroundColor: open === i ? `${sec.color}18` : th.cardBg, cursor: "pointer", textAlign: "left" as const, fontSize: "13px", fontWeight: 600, color: th.primary, boxShadow: "0 1px 2px rgba(0,0,0,0.06)" }}>
             {s.t}
-            <span style={{ fontSize: "11px", color: "#9CA3AF", transform: open === i ? "rotate(180deg)" : "none", transition: "0.2s" }}>▼</span>
+            <span style={{ fontSize: "11px", color: th.veryMuted, transform: open === i ? "rotate(180deg)" : "none", transition: "0.2s", flexShrink: 0 }}>▼</span>
           </button>
           {open === i && (
-            <div style={{ padding: "8px 12px", backgroundColor: "#F9FAFB", borderRadius: "0 0 8px 8px", marginTop: "-1px" }}>
+            <div style={{ padding: "8px 12px", backgroundColor: th.subtleBg, borderRadius: "0 0 8px 8px", marginTop: "-1px" }}>
               {s.c.map((c: string, j: number) => (
-                <p key={j} style={{ fontSize: "12px", color: "#374151", margin: "0 0 5px", lineHeight: 1.45, paddingLeft: "8px", borderLeft: `2px solid ${sec.color}40` }}>{c}</p>
+                <p key={j} style={{ fontSize: "12px", color: th.secondary, margin: "0 0 5px", lineHeight: 1.45, paddingLeft: "8px", borderLeft: `2px solid ${sec.color}40` }}>{c}</p>
               ))}
             </div>
           )}
@@ -329,11 +362,26 @@ function RefView({ sec, onBack }: { sec: any; onBack: () => void }) {
   );
 }
 
+// ─── App ──────────────────────────────────────────────────────────────────────
+
 export default function App() {
+  const [dark, setDark] = useState(() => {
+    try { return localStorage.getItem("nccn-dark") === "1"; } catch { return false; }
+  });
   const [tab, setTab] = useState("pathways");
   const [selT, setSelT] = useState<string | null>(null);
   const [selR, setSelR] = useState<any>(null);
   const [q, setQ] = useState("");
+
+  const th = dark ? DARK : LIGHT;
+
+  const toggleDark = () => {
+    setDark(d => {
+      const next = !d;
+      try { localStorage.setItem("nccn-dark", next ? "1" : "0"); } catch {}
+      return next;
+    });
+  };
 
   const cats = [
     { label: "Gliomas", ids: ["circumscribed","oligo","astro","gbm","hgg_other"] },
@@ -344,32 +392,40 @@ export default function App() {
   const fr = REF.filter(r => r.title.toLowerCase().includes(q.toLowerCase()) || r.code.toLowerCase().includes(q.toLowerCase()));
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F8FAFC", fontFamily: "'SF Pro Text',-apple-system,BlinkMacSystemFont,sans-serif" }}>
-      <style>{`@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}} *{box-sizing:border-box} :root{color-scheme:light} html,body{background:#F8FAFC!important}`}</style>
+    <div style={{ minHeight: "100vh", backgroundColor: th.pageBg, fontFamily: "'SF Pro Text',-apple-system,BlinkMacSystemFont,sans-serif" }}>
+      <style>{`@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}} *{box-sizing:border-box} :root{color-scheme:${th.colorScheme}} html,body{background:${th.pageBg}!important}`}</style>
+
+      {/* Fixed dark mode toggle — always visible */}
+      <button
+        onClick={toggleDark}
+        aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+        style={{ position: "fixed", top: "12px", right: "12px", zIndex: 1000, border: `1px solid ${th.border}`, borderRadius: "8px", padding: "6px 10px", fontSize: "15px", cursor: "pointer", backgroundColor: th.cardBg, color: th.muted, boxShadow: "0 1px 4px rgba(0,0,0,0.12)", touchAction: "manipulation" as const }}
+      >{dark ? "☀️" : "🌙"}</button>
+
       <div style={{ maxWidth: "600px", margin: "0 auto", padding: "14px 12px 80px" }}>
         {selT ? (
-          <div style={{ animation: "fi 0.2s" }}><DecTool tid={selT} onBack={() => setSelT(null)} /></div>
+          <div style={{ animation: "fi 0.2s" }}><DecTool tid={selT} onBack={() => setSelT(null)} th={th} /></div>
         ) : selR ? (
-          <div style={{ animation: "fi 0.2s" }}><RefView sec={selR} onBack={() => setSelR(null)} /></div>
+          <div style={{ animation: "fi 0.2s" }}><RefView sec={selR} onBack={() => setSelR(null)} th={th} /></div>
         ) : (
           <div style={{ animation: "fi 0.2s" }}>
             <div style={{ textAlign: "center" as const, marginBottom: "14px" }}>
               <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "46px", height: "46px", borderRadius: "13px", background: "linear-gradient(135deg,#4F46E5,#7C3AED)", marginBottom: "6px" }}>
                 <span style={{ fontSize: "22px" }}>🧠</span>
               </div>
-              <h1 style={{ fontSize: "19px", fontWeight: 800, color: "#111827", margin: "0 0 1px" }}>NCCN CNS Cancers</h1>
-              <p style={{ fontSize: "11px", color: "#6B7280", margin: 0 }}>Complete Clinical Decision Tool • v3.2025</p>
+              <h1 style={{ fontSize: "19px", fontWeight: 800, color: th.primary, margin: "0 0 1px" }}>NCCN CNS Cancers</h1>
+              <p style={{ fontSize: "11px", color: th.muted, margin: 0 }}>Complete Clinical Decision Tool • v3.2025</p>
             </div>
 
-            <div style={{ display: "flex", gap: "3px", marginBottom: "12px", backgroundColor: "#E5E7EB", borderRadius: "7px", padding: "3px" }}>
+            <div style={{ display: "flex", gap: "3px", marginBottom: "12px", backgroundColor: th.tabBg, borderRadius: "7px", padding: "3px" }}>
               {[{ id: "pathways", l: "Decision Pathways" },{ id: "reference", l: "Reference Library" }].map(t => (
-                <button key={t.id} onClick={() => { setTab(t.id); setQ(""); }} style={{ flex: 1, padding: "7px", borderRadius: "5px", border: "none", fontSize: "12px", fontWeight: 600, backgroundColor: tab === t.id ? "white" : "transparent", color: tab === t.id ? "#111827" : "#6B7280", cursor: "pointer", boxShadow: tab === t.id ? "0 1px 3px rgba(0,0,0,0.06)" : "none" }}>{t.l}</button>
+                <button key={t.id} onClick={() => { setTab(t.id); setQ(""); }} style={{ flex: 1, padding: "7px", borderRadius: "5px", border: "none", fontSize: "12px", fontWeight: 600, backgroundColor: tab === t.id ? th.activeTab : "transparent", color: tab === t.id ? th.activeTabText : th.inactiveTabText, cursor: "pointer", boxShadow: tab === t.id ? "0 1px 3px rgba(0,0,0,0.08)" : "none" }}>{t.l}</button>
               ))}
             </div>
 
             <div style={{ position: "relative" as const, marginBottom: "12px" }}>
-              <input type="text" placeholder={tab === "pathways" ? "Search tumor..." : "Search reference..."} value={q} onChange={e => setQ(e.target.value)} style={{ width: "100%", padding: "9px 13px 9px 34px", borderRadius: "8px", border: "1px solid #D1D5DB", fontSize: "13px", outline: "none", backgroundColor: "white" }} />
-              <span style={{ position: "absolute" as const, left: "11px", top: "50%", transform: "translateY(-50%)", fontSize: "13px", color: "#9CA3AF" }}>🔍</span>
+              <input type="text" placeholder={tab === "pathways" ? "Search tumor..." : "Search reference..."} value={q} onChange={e => setQ(e.target.value)} style={{ width: "100%", padding: "9px 13px 9px 34px", borderRadius: "8px", border: `1px solid ${th.inputBorder}`, fontSize: "13px", outline: "none", backgroundColor: th.inputBg, color: th.primary }} />
+              <span style={{ position: "absolute" as const, left: "11px", top: "50%", transform: "translateY(-50%)", fontSize: "13px", color: th.veryMuted }}>🔍</span>
             </div>
 
             {tab === "pathways" ? (
@@ -378,15 +434,15 @@ export default function App() {
                 if (!ts.length) return null;
                 return (
                   <div key={ci} style={{ marginBottom: "14px" }}>
-                    <h3 style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: "#9CA3AF", margin: "0 0 5px 2px" }}>{cat.label}</h3>
+                    <h3 style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.06em", color: th.veryMuted, margin: "0 0 5px 2px" }}>{cat.label}</h3>
                     {ts.map(t => (
-                      <button key={t.id} onClick={() => setSelT(t.id)} style={{ display: "flex", alignItems: "center", gap: "9px", width: "100%", padding: "11px 12px", marginBottom: "3px", borderRadius: "8px", border: "none", backgroundColor: "white", cursor: "pointer", textAlign: "left" as const, boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
-                        <div style={{ width: "34px", height: "34px", borderRadius: "8px", backgroundColor: `${t.color}10`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "17px", flexShrink: 0 }}>{t.icon}</div>
+                      <button key={t.id} onClick={() => setSelT(t.id)} style={{ display: "flex", alignItems: "center", gap: "9px", width: "100%", padding: "11px 12px", marginBottom: "3px", borderRadius: "8px", border: "none", backgroundColor: th.cardBg, cursor: "pointer", textAlign: "left" as const, boxShadow: "0 1px 2px rgba(0,0,0,0.06)" }}>
+                        <div style={{ width: "34px", height: "34px", borderRadius: "8px", backgroundColor: `${t.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "17px", flexShrink: 0 }}>{t.icon}</div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "#111827" }}>{t.label}</p>
-                          {"sub" in t && t.sub && <p style={{ margin: "1px 0 0", fontSize: "10px", color: "#9CA3AF" }}>{t.sub}</p>}
+                          <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: th.primary }}>{t.label}</p>
+                          {"sub" in t && t.sub && <p style={{ margin: "1px 0 0", fontSize: "10px", color: th.veryMuted }}>{t.sub}</p>}
                         </div>
-                        <span style={{ fontSize: "9px", fontWeight: 600, color: t.color, backgroundColor: `${t.color}10`, padding: "2px 5px", borderRadius: "3px", flexShrink: 0 }}>{t.code}</span>
+                        <span style={{ fontSize: "9px", fontWeight: 600, color: t.color, backgroundColor: `${t.color}15`, padding: "2px 5px", borderRadius: "3px", flexShrink: 0 }}>{t.code}</span>
                       </button>
                     ))}
                   </div>
@@ -394,19 +450,19 @@ export default function App() {
               })
             ) : (
               fr.map(ref => (
-                <button key={ref.id} onClick={() => setSelR(ref)} style={{ display: "flex", alignItems: "center", gap: "9px", width: "100%", padding: "11px 12px", marginBottom: "3px", borderRadius: "8px", border: "none", backgroundColor: "white", cursor: "pointer", textAlign: "left" as const, boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
-                  <div style={{ width: "34px", height: "34px", borderRadius: "8px", backgroundColor: `${ref.color}10`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "17px", flexShrink: 0 }}>{ref.icon}</div>
+                <button key={ref.id} onClick={() => setSelR(ref)} style={{ display: "flex", alignItems: "center", gap: "9px", width: "100%", padding: "11px 12px", marginBottom: "3px", borderRadius: "8px", border: "none", backgroundColor: th.cardBg, cursor: "pointer", textAlign: "left" as const, boxShadow: "0 1px 2px rgba(0,0,0,0.06)" }}>
+                  <div style={{ width: "34px", height: "34px", borderRadius: "8px", backgroundColor: `${ref.color}15`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "17px", flexShrink: 0 }}>{ref.icon}</div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: "#111827" }}>{ref.title}</p>
-                    <p style={{ margin: "1px 0 0", fontSize: "10px", color: "#9CA3AF" }}>{ref.subs.length} sections</p>
+                    <p style={{ margin: 0, fontSize: "13px", fontWeight: 600, color: th.primary }}>{ref.title}</p>
+                    <p style={{ margin: "1px 0 0", fontSize: "10px", color: th.veryMuted }}>{ref.subs.length} sections</p>
                   </div>
-                  <span style={{ fontSize: "9px", fontWeight: 600, color: ref.color, backgroundColor: `${ref.color}10`, padding: "2px 5px", borderRadius: "3px" }}>{ref.code}</span>
+                  <span style={{ fontSize: "9px", fontWeight: 600, color: ref.color, backgroundColor: `${ref.color}15`, padding: "2px 5px", borderRadius: "3px" }}>{ref.code}</span>
                 </button>
               ))
             )}
 
             <div style={{ textAlign: "center" as const, marginTop: "20px", padding: "10px" }}>
-              <p style={{ fontSize: "9px", color: "#D1D5DB", margin: 0, lineHeight: 1.5 }}>NCCN CNS Cancers v3.2025 • For educational/clinical reference use only • Not a substitute for professional medical judgment</p>
+              <p style={{ fontSize: "9px", color: th.disclaimer, margin: 0, lineHeight: 1.5 }}>NCCN CNS Cancers v3.2025 • For educational/clinical reference use only • Not a substitute for professional medical judgment</p>
             </div>
           </div>
         )}
