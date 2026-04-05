@@ -1,5 +1,5 @@
 {
   "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter @workspace/neuroonc-tool run build",
-  "outputDirectory": "artifacts/neuroonc-tool/dist"
+  "outputDirectory": "artifacts/neuroonc-tool/dist/public"
 }
