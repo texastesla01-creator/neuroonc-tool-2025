@@ -307,7 +307,7 @@ function DecTool({ tid, onBack, th }: { tid: string; onBack: () => void; th: Th 
           )}
           <div style={{ display: "flex", gap: "8px" }}>
             <button onClick={back} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: `1px solid ${th.btnBorder}`, backgroundColor: th.btnBg, cursor: "pointer", fontSize: "13px", fontWeight: 600, color: th.primary }}>← Back</button>
-            <button onClick={() => { setCur(tid); setHist([]); }} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: tumor?.color, color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>New</button>
+            <button onClick={() => { setCur(tid); setHist(DT[tid]?.steps ? [DT[tid].steps[0].id] : []); }} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: tumor?.color, color: "white", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>New</button>
           </div>
         </div>
       ) : step.redirect ? (
