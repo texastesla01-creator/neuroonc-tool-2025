@@ -1,0 +1,12 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+button {
+  -webkit-appearance: none;
+  touch-action: manipulation;
+}
