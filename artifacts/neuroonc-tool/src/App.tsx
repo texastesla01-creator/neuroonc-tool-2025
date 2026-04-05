@@ -461,8 +461,12 @@ export default function App() {
               ))
             )}
 
-            <div style={{ textAlign: "center" as const, marginTop: "20px", padding: "10px" }}>
-              <p style={{ fontSize: "9px", color: th.disclaimer, margin: 0, lineHeight: 1.5 }}>NCCN CNS Cancers v3.2025 • For educational/clinical reference use only • Not a substitute for professional medical judgment</p>
+            <div style={{ marginTop: "20px", padding: "13px 14px", backgroundColor: dark ? "#422006" : "#FFFBEB", border: `1px solid ${dark ? "#92400E" : "#F59E0B"}`, borderRadius: "10px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
+              <span style={{ fontSize: "18px", flexShrink: 0, lineHeight: 1 }}>⚠️</span>
+              <div>
+                <p style={{ margin: "0 0 2px", fontSize: "11px", fontWeight: 700, color: dark ? "#FCD34D" : "#92400E", letterSpacing: "0.01em" }}>Educational &amp; Clinical Reference Only</p>
+                <p style={{ margin: 0, fontSize: "11px", color: dark ? "#FDE68A" : "#78350F", lineHeight: 1.5 }}>NCCN CNS Cancers v3.2025 — Not a substitute for professional medical judgment. Always consult current NCCN guidelines and institutional protocols.</p>
+              </div>
             </div>
           </div>
         )}
